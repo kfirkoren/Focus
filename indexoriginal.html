@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>טופס רב־שלבי | מעבר דפים</title>
+  <style>
+    body{margin:0;font-family:Assistant,Arial,sans-serif;background:#535353;color:#fff;}
+    .page{display:none;min-height:100vh;align-items:center;justify-content:center;}
+    .page.active{display:flex;align-items:center;justify-content:center;animation:.4s fade both}
+    @keyframes fade{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:translateX(0)}}
+    .card{background:#1f1f1f;padding:30px;border-radius:16px;box-shadow:0 8px 25px rgba(0,0,0,.3);width:min(500px,90%)}
+    h2{margin-top:0;font-size:24px}
+    .field{margin:16px 0;display:grid;gap:8px}
+    input,select,textarea{padding:12px;border-radius:8px;border:1px solid #ccc;font-size:16px}
+    .actions{display:flex;justify-content:space-between;margin-top:20px}
+    button{padding:10px 16px;border:none;border-radius:8px;cursor:pointer;font-weight:700}
+    .btn-primary{background:#F36F21;color:#000}
+    .btn-ghost{background:transparent;color:#fff;border:1px solid #fff}
+  </style>
+</head>
+<body>
+
+<div class="page active" data-step="0">
+  <div class="card">
+    <h2>סוג שירות</h2>
+    <div class="field">
+      <label><input type="radio" name="service" value="הופעה חיה"> הופעה חיה</label>
+      <label><input type="radio" name="service" value="סרטון פתיחה"> סרטון פתיחה</label>
+      <label><input type="radio" name="service" value="שניהם"> שניהם</label>
+    </div>
+    <div class="actions">
+      <span></span>
+      <button class="btn-primary" onclick="nextPage()">הבא</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" data-step="1">
+  <div class="card">
+    <h2>פרטי אירוע</h2>
+    <div class="field">
+      <label>סוג אירוע <select id="eventType"><option>חתונה</option><option>בר מצווה</option></select></label>
+    </div>
+    <div class="field">
+      <label>תאריך <input type="date" id="eventDate"></label>
+    </div>
+    <div class="field">
+      <label>מיקום <input type="text" id="eventLocation" placeholder="תל אביב"></label>
+    </div>
+    <div class="actions">
+      <button class="btn-ghost" onclick="prevPage()">חזרה</button>
+      <button class="btn-primary" onclick="nextPage()">הבא</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" data-step="2">
+  <div class="card">
+    <h2>פרטי קשר</h2>
+    <div class="field"><label>שם מלא <input type="text" id="fullName"></label></div>
+    <div class="field"><label>טלפון <input type="tel" id="phone"></label></div>
+    <div class="field"><label>אימייל <input type="email" id="email"></label></div>
+    <div class="actions">
+      <button class="btn-ghost" onclick="prevPage()">חזרה</button>
+      <button class="btn-primary" onclick="nextPage()">הבא</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" data-step="3">
+  <div class="card">
+    <h2>סקירה</h2>
+    <div id="review"></div>
+    <div class="actions">
+      <button class="btn-ghost" onclick="prevPage()">חזרה</button>
+      <button class="btn-primary" onclick="submitForm()">שליחה</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+let current = 0;
+let pages;
+
+function initPages() {
+  pages = document.querySelectorAll('.page');
+  if (!pages.length) {
+    alert('לא נמצאו דפים בטופס!');
+    return false;
+  }
+  return true;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (initPages()) {
+    showPage(0);
+  }
+});
+
+
+function showPage(i) {
+  if (!pages || !pages.length) {
+    if (!initPages()) return;
+  }
+  if (pages[current]) pages[current].classList.remove('active');
+  current = i;
+  if (pages[current]) pages[current].classList.add('active');
+  if (current === 3) buildReview();
+}
+
+function nextPage() {
+  try {
+    if (!pages || !pages.length) {
+      if (!initPages()) return;
+    }
+    if (current < pages.length - 1) showPage(current + 1);
+  } catch (e) {
+    console.error('שגיאה במעבר דף:', e);
+  }
+}
+
+function prevPage() {
+  try {
+    if (!pages || !pages.length) {
+      if (!initPages()) return;
+    }
+    if (current > 0) showPage(current - 1);
+  } catch (e) {
+    console.error('שגיאה במעבר דף:', e);
+  }
+}
+
+function buildReview(){
+  const r=document.getElementById('review');
+  r.innerHTML=`
+    <p><strong>שירות:</strong> ${document.querySelector('input[name=service]:checked')?.value||''}</p>
+    <p><strong>סוג אירוע:</strong> ${document.getElementById('eventType').value}</p>
+    <p><strong>תאריך:</strong> ${document.getElementById('eventDate').value}</p>
+    <p><strong>מיקום:</strong> ${document.getElementById('eventLocation').value}</p>
+    <p><strong>שם:</strong> ${document.getElementById('fullName').value}</p>
+    <p><strong>טלפון:</strong> ${document.getElementById('phone').value}</p>
+    <p><strong>אימייל:</strong> ${document.getElementById('email').value}</p>`;
+}
+
+function submitForm() {
+  const data = {
+    service: document.querySelector('input[name=service]:checked')?.value || '',
+    eventType: document.getElementById('eventType').value,
+    eventDate: document.getElementById('eventDate').value,
+    eventLocation: document.getElementById('eventLocation').value,
+    fullName: document.getElementById('fullName').value,
+    phone: document.getElementById('phone').value,
+    email: document.getElementById('email').value
+  };
+
+  fetch('https://your-n8n-webhook-url', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      // הוסף טוקן אם צריך:
+      // 'Authorization': 'Bearer YOUR_TOKEN'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(res => {
+    if (res.ok) {
+      alert('הטופס נשלח בהצלחה!');
+    } else {
+      alert('אירעה שגיאה בשליחה');
+    }
+  })
+  .catch(() => alert('אירעה שגיאה בשליחה'));
+}
+</script>
+</body>
+</html>
