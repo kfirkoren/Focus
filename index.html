@@ -309,39 +309,6 @@ input:focus, textarea:focus, select:focus{border-bottom-color:var(--primary); ba
   }
 }
 
-/* תיקון למובייל – למנוע הלבנה של בלוק ה-Repeaters */
-@media (max-width: 640px) {
-  .rep-item {
-    /* רקע כהה עדין במקום blur */
-    background: rgba(255,255,255,0.06) !important;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 14px;
-
-    /* ביטול הטשטוש שיוצר לובן באייפון */
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-
-    /* מונע "זליגת" צביעה/צללים פנימה */
-    isolation: isolate;
-    box-shadow: 0 2px 10px rgba(0,0,0,.35);
-  }
-
-  /* שדות בתוך ה-repeater נשארים באפור-שקוף כמו בשאר הטופס */
-  .rep-item .field input,
-  .rep-item .field textarea,
-  .rep-item .field select {
-    background-color: rgba(255,255,255,0.05) !important;
-    box-shadow: none !important;
-  }
-}
-
-/* אופציונלי: אם עדיין לבן – אפשר להחליש גם את ה-blur של ה-.card במובייל */
-@media (max-width: 640px) {
-  .card {
-    -webkit-backdrop-filter: blur(12px) saturate(160%);
-    backdrop-filter: blur(12px) saturate(160%);
-  }
-}
 
 
   </style>
