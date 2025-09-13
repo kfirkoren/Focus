@@ -265,26 +265,51 @@ input:focus, textarea:focus, select:focus{border-bottom-color:var(--primary); ba
   100% { background-position: 250% 0,  250% 0, 0 0 }
 }
 
+/* תיקון ספציפי למובייל (iOS/טלפונים) */
+@media (max-width: 640px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea,
+  select {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background-color: rgba(255,255,255,0.05) !important;
+    color: var(--text) !important;
+    border: none;
+    border-bottom: 1.6px solid var(--line);
+    border-radius: 12px;
+    box-shadow: none !important;
+    background-clip: padding-box !important;
+  }
 
-/* תיקון ייחודי ל-iOS Safari */
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-textarea,
-select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-color: rgba(255,255,255,0.05) !important;
-  box-shadow: none !important;
-  border-radius: 12px; /* שומר על הקו שלך */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    background-color: rgba(255,255,255,0.08) !important;
+    border-bottom-color: var(--primary);
+    outline: none;
+    box-shadow: none !important;
+  }
+
+  /* ביטול מילוי אוטומטי (צהוב/לבן) */
+  input:-webkit-autofill,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: var(--text) !important;
+    box-shadow: 0 0 0 1000px rgba(255,255,255,0.05) inset !important;
+    transition: background-color 9999s ease-out 0s;
+    caret-color: var(--text) !important;
+  }
+
+  /* מניעת blur שגורם לרקע לבן באייפון */
+  input, textarea, select {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
 }
-input:focus,
-textarea:focus,
-select:focus {
-  background-color: rgba(255,255,255,0.08) !important;
-  box-shadow: none !important;
-}
+
+
   </style>
 </head>
 <body>
