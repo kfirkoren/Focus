@@ -366,6 +366,39 @@ input:focus, textarea:focus, select:focus{border-bottom-color:var(--primary); ba
   body::before,
   body::after { display: none !important; }
 }
+/*הוספת פונטים מתאימים גם לשדות שבתוך הטקסט אינפוט************************************************************/
+/* תן שם לפונט פעם אחת */
+:root{
+  --app-font: "Rubik", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+}
+body{ font-family: var(--app-font); }
+
+/* טפסים יורשים את הפונט והגדלים */
+input, textarea, select, button {
+  font: inherit !important;          /* כולל family, size, weight, line-height */
+  color: var(--text);
+  letter-spacing: inherit;
+  text-rendering: optimizeLegibility;
+}
+
+/* placeholder גם עם אותו פונט */
+input::placeholder,
+textarea::placeholder {
+  font: inherit;
+  color: #bbb;
+  opacity: 1;
+}
+
+/* אוטופיל ב-WebKit (iOS/Chrome) לפעמים מחליף פונט – נכריח ירושה */
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill{
+  -webkit-text-fill-color: var(--text);
+  font: inherit !important;
+}
+
+/* iOS לא "מנפח"/מקטין טקסט */
+html { -webkit-text-size-adjust: 100%; }
 
   </style>
 </head>
